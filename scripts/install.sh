@@ -11,6 +11,7 @@ TKJ_ROOT="${TKJ_ROOT:-/opt/tkjpanel}"
 TKJ_USER="tkjpanel"
 REPO_URL="${REPO_URL:-https://github.com/dedirahmani/tkj-panel.git}"
 PHP_VER="8.3"
+PHP="/usr/bin/php${PHP_VER}"   # selalu versi ini, walau ada PHP lain (mis. 8.4 bawaan Debian 13)
 GO_VER="1.24.4"   # minimal 1.22 (agent/go.mod); repo distro sering terlalu tua
 
 # Jalankan perintah sebagai user panel. runuser selalu ada (util-linux); sudo belum tentu.
@@ -32,13 +33,16 @@ esac
 # --- 2. Repositori PHP multi-versi ------------------------------------------
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y ca-certificates curl wget gnupg lsb-release apt-transport-https software-properties-common unzip git
+# Paket dasar yang ada di semua target. software-properties-common (add-apt-repository) hanya
+# ada/diperlukan di Ubuntu; Debian 13 sudah tidak menyediakannya. apt sudah mendukung HTTPS.
+apt-get install -y ca-certificates curl wget gnupg unzip git openssl
 
 if [ "$ID" = "ubuntu" ]; then
+  apt-get install -y software-properties-common
   add-apt-repository -y ppa:ondrej/php
 else
   curl -fsSL https://packages.sury.org/php/apt.gpg -o /usr/share/keyrings/sury-php.gpg
-  echo "deb [signed-by=/usr/share/keyrings/sury-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/sury-php.list
+  echo "deb [signed-by=/usr/share/keyrings/sury-php.gpg] https://packages.sury.org/php/ ${VERSION_CODENAME} main" > /etc/apt/sources.list.d/sury-php.list
 fi
 apt-get update -y
 
@@ -62,7 +66,7 @@ fi
 
 # Composer
 if ! command -v composer >/dev/null 2>&1; then
-  curl -fsSL https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  curl -fsSL https://getcomposer.org/installer | "$PHP" -- --install-dir=/usr/local/bin --filename=composer
 fi
 
 # --- 4. User sistem panel ----------------------------------------------------
@@ -80,7 +84,7 @@ cd "$TKJ_ROOT"
 # Kode diklon sebagai root: serahkan ke user panel SEBELUM composer/artisan menulis vendor/ & .env.
 chown -R "$TKJ_USER:$TKJ_USER" "$TKJ_ROOT"
 
-as_panel composer install --no-dev --optimize-autoloader --no-interaction
+as_panel "$PHP" /usr/local/bin/composer install --no-dev --optimize-autoloader --no-interaction
 
 # --- 6. Konfigurasi .env -----------------------------------------------------
 if [ ! -f .env ]; then
@@ -100,16 +104,16 @@ if [ ! -f .env ]; then
     echo "TKJPANEL_TRUSTED_PROXIES=127.0.0.1"
   } >> .env
   chown "$TKJ_USER:$TKJ_USER" .env && chmod 0640 .env
-  as_panel php artisan key:generate --force
+  as_panel "$PHP" artisan key:generate --force
 fi
 touch database/database.sqlite
 chown -R "$TKJ_USER:$TKJ_USER" "$TKJ_ROOT"
 
-as_panel php artisan migrate --seed --force
-as_panel php artisan optimize
+as_panel "$PHP" artisan migrate --seed --force
+as_panel "$PHP" artisan optimize
 
 # Scheduler Laravel (sinkron status SSL dari hasil job agent, dll).
-echo "* * * * * ${TKJ_USER} cd ${TKJ_ROOT} && php artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/tkjpanel
+echo "* * * * * ${TKJ_USER} cd ${TKJ_ROOT} && ${PHP} artisan schedule:run >> /dev/null 2>&1" > /etc/cron.d/tkjpanel
 
 # --- 7. Agent root (Go) ------------------------------------------------------
 # Go resmi dari go.dev bila belum ada atau terlalu tua (Debian 12 = 1.19, Ubuntu 22.04 = 1.18).
@@ -150,7 +154,7 @@ After=network.target
 [Service]
 User=${TKJ_USER}
 WorkingDirectory=${TKJ_ROOT}
-ExecStart=/usr/bin/php artisan serve --host=127.0.0.1 --port=${PANEL_PORT}
+ExecStart=${PHP} artisan serve --host=127.0.0.1 --port=${PANEL_PORT}
 Restart=on-failure
 [Install]
 WantedBy=multi-user.target
@@ -159,7 +163,7 @@ systemctl daemon-reload && systemctl enable --now tkjpanel
 
 # --- 10. Ringkasan -----------------------------------------------------------
 ADMIN_PASS=$(grep -E '^TKJPANEL_ADMIN_PASSWORD=' .env | cut -d= -f2)
-log "Verifikasi kesehatan:"; as_panel php artisan tkjpanel:doctor || true
+log "Verifikasi kesehatan:"; as_panel "$PHP" artisan tkjpanel:doctor || true
 echo
 log "TKJPanel terpasang."
 echo "  URL lokal   : http://127.0.0.1:${PANEL_PORT}"
