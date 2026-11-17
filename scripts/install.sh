@@ -20,6 +20,8 @@ as_panel() { runuser -u "$TKJ_USER" -- env HOME="$TKJ_ROOT" COMPOSER_HOME=/tmp/t
 log()  { echo -e "\033[1;36m[tkjpanel]\033[0m $*"; }
 warn() { echo -e "\033[1;33m[tkjpanel]\033[0m $*"; }
 die()  { echo -e "\033[1;31m[tkjpanel]\033[0m $*" >&2; exit 1; }
+# Tunjukkan langkah yang gagal dengan jelas (set -e menghentikan skrip di sana).
+trap 'echo -e "\033[1;31m[tkjpanel] GAGAL di baris ${LINENO}: ${BASH_COMMAND}\033[0m" >&2' ERR
 
 [ "$(id -u)" -eq 0 ] || die "Jalankan sebagai root (sudo)."
 
