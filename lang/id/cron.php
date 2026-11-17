@@ -21,7 +21,7 @@ return [
     'deactivate' => 'Nonaktifkan',
     'next_run' => 'Jalan berikutnya',
 
-    'empty' => 'Belum ada cron job.',
+    'empty' => 'Belum ada cron job. Cron job menjalankan perintah sesuai jadwal sebagai user Linux pemilik.',
     'created' => 'Cron job dibuat. Crontab diantre ke agent.',
     'deleted' => 'Cron job dihapus.',
     'quota_exceeded' => 'Kuota tercapai: maksimal :max cron job untuk paket ini.',

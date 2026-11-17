@@ -13,7 +13,8 @@ return [
     'status' => 'Status',
     'suspend' => 'Suspend',
     'activate' => 'Aktifkan',
-    'empty' => 'Belum ada pengguna.',
+    'empty' => 'Belum ada pengguna di lingkup Anda. Tiap pengguna baru mendapat akun panel dan satu user Linux terisolasi.',
+    'phone_wa' => 'nomor WA',
     'self' => 'Anda',
     'created' => 'Pengguna :name dibuat.',
     'suspended' => 'Pengguna disuspend.',
@@ -37,7 +38,7 @@ return [
     'reprovision' => 'Provision ulang',
     'reprovision_hint' => 'Antre ulang user Linux, home, open_basedir, dan kuota disk ke agent.',
     'sftp_accounts' => 'Akun SFTP',
-    'no_sftp' => 'Belum ada akun SFTP.',
+    'no_sftp' => 'Pengguna ini belum punya akun SFTP.',
 
     // Alokasi Reseller
     'allocation' => 'Alokasi Reseller',

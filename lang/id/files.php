@@ -18,7 +18,9 @@ return [
     'download' => 'Unduh',
     'chmod' => 'chmod',
 
-    'empty' => 'Folder ini kosong.',
+    'empty' => 'Folder ini kosong. Unggah berkas atau buat folder baru dengan tombol di atas.',
+    'path' => 'Lokasi folder',
+    'size_folder' => 'Folder',
     'folder_name' => 'Nama folder',
     'rename_to' => 'Nama baru',
     'mode' => 'Mode (oktal)',

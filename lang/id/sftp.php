@@ -18,7 +18,7 @@ return [
     'home' => 'Home chroot',
     'reset_password' => 'Reset password',
 
-    'empty' => 'Belum ada akun SFTP.',
+    'empty' => 'Belum ada akun SFTP. Akun SFTP memberi akses file yang dikunci ke satu folder di home pemilik.',
     'created' => 'Akun SFTP :name dibuat.',
     'deleted' => 'Akun SFTP dihapus.',
     'password_reset' => 'Password direset. Salin password baru sekarang.',
@@ -29,5 +29,7 @@ return [
     'confirm_reset' => 'Buat password baru untuk akun SFTP ini?',
 
     'credentials_title' => 'Kredensial SFTP',
-    'credentials_warning' => 'Salin sekarang — password tidak akan ditampilkan lagi.',
+    'credentials_warning' => 'Salin sekarang. Password tidak akan ditampilkan lagi.',
+    'copy' => 'Salin',
+    'copied' => 'Tersalin',
 ];

@@ -3,26 +3,24 @@
 @section('title', __('cron.create_title'))
 
 @section('content')
-    <div class="mb-6">
-        <a href="{{ route('cron.index') }}" class="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-600 dark:text-slate-400">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-            {{ __('common.back') }}
-        </a>
-        <h2 class="mt-2 text-xl font-bold tracking-tight">{{ __('cron.create_title') }}</h2>
-    </div>
+    <a href="{{ route('cron.index') }}" class="tkj-action-muted -ml-2.5 mb-3 gap-1">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        {{ __('common.back') }}
+    </a>
 
     <form method="POST" action="{{ route('cron.store') }}"
           x-data="{ expr: '{{ old('expression', '0 0 * * *') }}' }"
-          class="max-w-2xl space-y-5 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          class="tkj-panel tkj-panel-body max-w-2xl space-y-5">
         @csrf
 
         <div>
-            <label class="mb-1 block text-sm font-medium">{{ __('cron.preset') }}</label>
-            <div class="flex flex-wrap gap-2">
+            <p id="cron-preset-label" class="tkj-label">{{ __('cron.preset') }}</p>
+            <div role="group" aria-labelledby="cron-preset-label" class="flex flex-wrap gap-2">
                 @foreach ($presets as $value => $key)
                     <button type="button" @click="expr = '{{ $value }}'"
-                            :class="expr === '{{ $value }}' ? 'bg-brand-600 text-white border-brand-600' : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800'"
-                            class="rounded-lg border px-3 py-1.5 text-xs font-medium transition">
+                            :aria-pressed="(expr === '{{ $value }}').toString()"
+                            :class="expr === '{{ $value }}' ? 'border-brand-600 bg-brand-600 text-white' : 'border-slate-300 bg-white text-slate-800 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800'"
+                            class="inline-flex min-h-[44px] items-center rounded-md border px-3 text-sm font-medium sm:min-h-[36px]">
                         {{ __('cron.presets.'.$key) }}
                     </button>
                 @endforeach
@@ -31,37 +29,44 @@
 
         <div class="grid gap-5 sm:grid-cols-2">
             <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('cron.expression') }}</label>
-                <input name="expression" type="text" required x-model="expr"
-                       class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 font-mono text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
-                <p class="mt-1 text-xs text-slate-400">{{ __('cron.expression_hint') }}</p>
+                <label for="cron-expression" class="tkj-label">{{ __('cron.expression') }}</label>
+                <input id="cron-expression" name="expression" type="text" required x-model="expr"
+                       aria-describedby="cron-expression-hint" @error('expression') aria-invalid="true" @enderror
+                       class="tkj-input font-mono">
+                <p id="cron-expression-hint" class="tkj-hint">{{ __('cron.expression_hint') }}</p>
+                @error('expression')<p class="tkj-error">{{ $message }}</p>@enderror
             </div>
             <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('cron.owner') }}</label>
-                <select name="user_id" class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+                <label for="cron-owner" class="tkj-label">{{ __('cron.owner') }}</label>
+                <select id="cron-owner" name="user_id" @error('user_id') aria-invalid="true" @enderror class="tkj-input">
                     @foreach ($owners as $owner)
                         <option value="{{ $owner->id }}" @selected(old('user_id') == $owner->id)>{{ $owner->name }} ({{ $owner->linux_username }})</option>
                     @endforeach
                 </select>
+                @error('user_id')<p class="tkj-error">{{ $message }}</p>@enderror
             </div>
         </div>
 
         <div>
-            <label class="mb-1 block text-sm font-medium">{{ __('cron.command') }}</label>
-            <input name="command" type="text" required value="{{ old('command') }}" placeholder="php /home/user/site/artisan schedule:run"
-                   class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 font-mono text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
-            <p class="mt-1 text-xs text-slate-400">{{ __('cron.command_hint') }}</p>
+            <label for="cron-command" class="tkj-label">{{ __('cron.command') }}</label>
+            <input id="cron-command" name="command" type="text" required value="{{ old('command') }}" placeholder="php /home/user/site/artisan schedule:run"
+                   aria-describedby="cron-command-hint" @error('command') aria-invalid="true" @enderror
+                   class="tkj-input font-mono">
+            <p id="cron-command-hint" class="tkj-hint">{{ __('cron.command_hint') }}</p>
+            @error('command')<p class="tkj-error">{{ $message }}</p>@enderror
         </div>
 
         <div>
-            <label class="mb-1 block text-sm font-medium">{{ __('cron.comment') }}</label>
-            <input name="comment" type="text" value="{{ old('comment') }}"
-                   class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+            <label for="cron-comment" class="tkj-label">{{ __('cron.comment') }}</label>
+            <input id="cron-comment" name="comment" type="text" value="{{ old('comment') }}"
+                   @error('comment') aria-invalid="true" @enderror
+                   class="tkj-input">
+            @error('comment')<p class="tkj-error">{{ $message }}</p>@enderror
         </div>
 
-        <div class="flex items-center gap-3 pt-2">
-            <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">{{ __('common.create') }}</button>
-            <a href="{{ route('cron.index') }}" class="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400">{{ __('common.cancel') }}</a>
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button type="submit" class="tkj-btn">{{ __('common.create') }}</button>
+            <a href="{{ route('cron.index') }}" class="tkj-btn-secondary">{{ __('common.cancel') }}</a>
         </div>
     </form>
 @endsection

@@ -14,7 +14,7 @@ return [
     'method_dns' => 'DNS-01 (Cloudflare)',
     'wildcard' => 'Wildcard certificate (*.domain)',
     'wildcard_hint' => 'Covers all subdomains. Requires DNS-01 via Cloudflare.',
-    'dns_note' => 'DNS-01 needs a Cloudflare API token (configured in Settings — coming in M8).',
+    'dns_note' => 'DNS-01 uses the Cloudflare API token that a super admin sets on the Cloudflare page.',
 
     'primary_domain' => 'Primary domain',
     'domains' => 'Domains',
@@ -23,7 +23,7 @@ return [
     'type_wildcard' => 'Wildcard',
     'type_custom' => 'Custom',
     'expires' => 'Expires',
-    'never' => '—',
+    'never' => 'Not known yet',
     'auto_renew' => 'Auto-renew',
     'renew' => 'Renew now',
 
@@ -39,7 +39,7 @@ return [
         'expired' => 'Expired',
     ],
 
-    'empty' => 'No certificates yet.',
+    'empty' => 'No certificate has been requested or uploaded yet. Without one, sites only open over HTTP.',
     'requested' => 'Certificate requested for :domain. The agent will run acme.sh.',
     'uploaded' => 'Custom certificate uploaded.',
     'renew_requested' => 'Renewal requested.',

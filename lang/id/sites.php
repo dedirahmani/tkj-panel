@@ -39,7 +39,7 @@ return [
     'activate' => 'Aktifkan',
     'deactivate' => 'Nonaktifkan',
 
-    'empty' => 'Belum ada situs. Buat situs pertama Anda.',
+    'empty' => 'Belum ada situs. Situs baru menyiapkan folder web dan vhost Nginx untuk satu domain.',
     'created' => 'Situs :domain dibuat. Agent akan menyiapkan vhost.',
     'deleted' => 'Situs dihapus.',
     'status_changed' => 'Status situs diubah menjadi :status.',
@@ -53,6 +53,7 @@ return [
 
     // Halaman detail
     'view' => 'Lihat',
+    'subdomain_badge' => 'subdomain',
     'overview' => 'Ringkasan',
     'set_status' => 'Atur status',
     'aliases_none' => 'Tanpa alias',

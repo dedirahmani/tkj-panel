@@ -39,7 +39,7 @@ return [
     'activate' => 'Activate',
     'deactivate' => 'Deactivate',
 
-    'empty' => 'No sites yet. Create your first one.',
+    'empty' => 'No sites yet. A new site sets up the web folder and Nginx vhost for one domain.',
     'created' => 'Site :domain created. The agent will provision the vhost.',
     'deleted' => 'Site deleted.',
     'status_changed' => 'Site status changed to :status.',
@@ -53,6 +53,7 @@ return [
 
     // Show page
     'view' => 'View',
+    'subdomain_badge' => 'subdomain',
     'overview' => 'Overview',
     'set_status' => 'Set status',
     'aliases_none' => 'No aliases',

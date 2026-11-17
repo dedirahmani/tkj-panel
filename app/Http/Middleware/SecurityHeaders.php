@@ -43,7 +43,7 @@ class SecurityHeaders
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com",
             "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
             "img-src 'self' data:",
-            "font-src 'self' data: https://cdnjs.cloudflare.com",
+            "font-src 'self' data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net",
             "connect-src 'self' ws: wss:",
             "frame-ancestors 'none'",
             "base-uri 'self'",

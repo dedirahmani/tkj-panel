@@ -16,7 +16,7 @@ return [
     'bandwidth' => 'Bandwidth (MB/month)',
     'default' => 'Default',
     'is_default' => 'Set as default package',
-    'empty' => 'No packages yet.',
+    'empty' => 'No packages yet. A package sets the disk, domain and database quotas you can give to users.',
     'created' => 'Package :name created.',
     'users_count' => ':count user(s)',
 ];

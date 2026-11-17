@@ -2,10 +2,11 @@
 
 return [
     'title' => 'Cloudflare',
-    'subtitle' => 'Manage DNS records and provision Cloudflare Tunnels — the signature TKJPanel integration.',
+    'subtitle' => 'Manage DNS records and provision Cloudflare Tunnels for this server.',
     'token' => 'API token',
     'token_stored' => 'A token is saved. Leave blank to keep it.',
     'account_id' => 'Account ID',
+    'credentials' => 'API credentials',
     'not_configured' => 'Add a Cloudflare API token to manage DNS and tunnels.',
 
     'dns' => 'DNS records',
@@ -19,6 +20,7 @@ return [
     'dns_created' => 'DNS record created.',
     'dns_deleted' => 'DNS record deleted.',
     'no_records' => 'No records loaded. Enter a Zone ID and load.',
+    'zone_needed' => 'Load a Zone ID first so the record knows which zone it belongs to.',
 
     'tunnels' => 'Tunnels',
     'new_tunnel' => 'New tunnel',
@@ -27,8 +29,10 @@ return [
     'status' => 'Status',
     'tunnel_queued' => 'Tunnel provisioning queued to the agent.',
     'tunnel_deleted' => 'Tunnel removed.',
-    'empty_tunnels' => 'No tunnels yet.',
+    'empty_tunnels' => 'No hostname is routed through the tunnel yet. Enter a public hostname above to create the first one.',
+    'target' => 'Target',
     'confirm_delete_tunnel' => 'Delete this tunnel?',
+    'confirm_delete_record' => 'Delete DNS record :name from Cloudflare? This cannot be undone.',
     'tunnel_hint' => 'One tunnel for this server; each hostname points to a site or to the panel. DNS (CNAME) is created automatically. The API token needs Cloudflare Tunnel: Edit and DNS: Edit.',
     'tunnel_needs_account' => 'Set the Cloudflare Account ID (and an API token with Tunnel + DNS permissions) to use tunnels.',
     'target_panel' => 'TKJPanel panel (including web terminal)',

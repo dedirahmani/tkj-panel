@@ -14,7 +14,7 @@ return [
     'method_dns' => 'DNS-01 (Cloudflare)',
     'wildcard' => 'Sertifikat wildcard (*.domain)',
     'wildcard_hint' => 'Mencakup semua subdomain. Membutuhkan DNS-01 via Cloudflare.',
-    'dns_note' => 'DNS-01 memerlukan token API Cloudflare (diatur di Pengaturan — hadir di M8).',
+    'dns_note' => 'DNS-01 memakai token API Cloudflare yang diatur super admin di halaman Cloudflare.',
 
     'primary_domain' => 'Domain utama',
     'domains' => 'Domain',
@@ -23,7 +23,7 @@ return [
     'type_wildcard' => 'Wildcard',
     'type_custom' => 'Kustom',
     'expires' => 'Kedaluwarsa',
-    'never' => '—',
+    'never' => 'Belum diketahui',
     'auto_renew' => 'Perpanjang otomatis',
     'renew' => 'Perbarui sekarang',
 
@@ -39,7 +39,7 @@ return [
         'expired' => 'Kedaluwarsa',
     ],
 
-    'empty' => 'Belum ada sertifikat.',
+    'empty' => 'Belum ada sertifikat yang diminta atau diunggah. Tanpa sertifikat, situs hanya terbuka lewat HTTP.',
     'requested' => 'Sertifikat diminta untuk :domain. Agent akan menjalankan acme.sh.',
     'uploaded' => 'Sertifikat kustom diunggah.',
     'renew_requested' => 'Permintaan perpanjangan dikirim.',

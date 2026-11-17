@@ -3,61 +3,66 @@
 @section('title', __('users.create_title'))
 
 @section('content')
-    <div class="mb-6">
-        <a href="{{ route('users.index') }}" class="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-600 dark:text-slate-400">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+    <div class="mb-5">
+        <a href="{{ route('users.index') }}" class="inline-flex min-h-[44px] items-center gap-1 text-sm text-slate-600 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-300">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
             {{ __('common.back') }}
         </a>
-        <h2 class="mt-2 text-xl font-bold tracking-tight">{{ __('users.create_title') }}</h2>
     </div>
 
     @php $firstRole = old('role', ($roles[0]->value ?? 'user')); @endphp
     <form method="POST" action="{{ route('users.store') }}"
           x-data="{ role: '{{ $firstRole }}' }"
-          class="max-w-2xl space-y-5 rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          class="tkj-panel tkj-panel-body max-w-2xl space-y-5">
         @csrf
 
         <div class="grid gap-5 sm:grid-cols-2">
             <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('common.name') }}</label>
-                <input name="name" type="text" required value="{{ old('name') }}"
-                       class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+                <label for="name" class="tkj-label">{{ __('common.name') }}</label>
+                <input id="name" name="name" type="text" required value="{{ old('name') }}"
+                       class="tkj-input" @error('name') aria-invalid="true" @enderror>
+                @error('name')<p class="tkj-error">{{ $message }}</p>@enderror
             </div>
             <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('common.email') }}</label>
-                <input name="email" type="email" required value="{{ old('email') }}"
-                       class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+                <label for="email" class="tkj-label">{{ __('common.email') }}</label>
+                <input id="email" name="email" type="email" required value="{{ old('email') }}"
+                       class="tkj-input" @error('email') aria-invalid="true" @enderror>
+                @error('email')<p class="tkj-error">{{ $message }}</p>@enderror
             </div>
+        </div>
+
+        <div>
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div>
+                    <label for="password" class="tkj-label">{{ __('common.password') }}</label>
+                    <input id="password" name="password" type="password" required aria-describedby="password-hint"
+                           class="tkj-input" @error('password') aria-invalid="true" @enderror>
+                    @error('password')<p class="tkj-error">{{ $message }}</p>@enderror
+                </div>
+                <div>
+                    <label for="password_confirmation" class="tkj-label">{{ __('common.password') }} ({{ __('common.confirm') }})</label>
+                    <input id="password_confirmation" name="password_confirmation" type="password" required
+                           class="tkj-input">
+                </div>
+            </div>
+            <p id="password-hint" class="tkj-hint">{{ __('users.password_hint') }}</p>
         </div>
 
         <div class="grid gap-5 sm:grid-cols-2">
             <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('common.password') }}</label>
-                <input name="password" type="password" required
-                       class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
-            </div>
-            <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('common.password') }} ({{ __('common.confirm') }})</label>
-                <input name="password_confirmation" type="password" required
-                       class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
-            </div>
-        </div>
-        <p class="-mt-2 text-xs text-slate-400">{{ __('users.password_hint') }}</p>
-
-        <div class="grid gap-5 sm:grid-cols-2">
-            <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('users.role') }}</label>
-                <select name="role" required x-model="role"
-                        class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+                <label for="role" class="tkj-label">{{ __('users.role') }}</label>
+                <select id="role" name="role" required x-model="role"
+                        class="tkj-input" @error('role') aria-invalid="true" @enderror>
                     @foreach ($roles as $role)
                         <option value="{{ $role->value }}" @selected(old('role') === $role->value)>{{ $role->label() }}</option>
                     @endforeach
                 </select>
+                @error('role')<p class="tkj-error">{{ $message }}</p>@enderror
             </div>
             <div>
-                <label class="mb-1 block text-sm font-medium">{{ __('users.package') }}</label>
-                <select name="package_id"
-                        class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+                <label for="package_id" class="tkj-label">{{ __('users.package') }}</label>
+                <select id="package_id" name="package_id"
+                        class="tkj-input" @error('package_id') aria-invalid="true" @enderror>
                     <option value="">{{ __('common.none') }}</option>
                     @foreach ($packages as $package)
                         <option value="{{ $package->id }}" @selected(old('package_id') == $package->id || ($package->is_default && ! old('package_id')))>
@@ -65,13 +70,14 @@
                         </option>
                     @endforeach
                 </select>
+                @error('package_id')<p class="tkj-error">{{ $message }}</p>@enderror
             </div>
         </div>
 
         {{-- Alokasi Reseller (muncul saat peran = Reseller) --}}
-        <div x-show="role === 'reseller'" x-cloak class="rounded-lg border border-amber-200 bg-amber-50/50 p-4 dark:border-amber-500/30 dark:bg-amber-500/5">
-            <p class="mb-1 text-sm font-semibold text-amber-800 dark:text-amber-300">{{ __('users.allocation') }}</p>
-            <p class="mb-3 text-xs text-amber-700/80 dark:text-amber-300/80">{{ __('users.allocation_hint') }}</p>
+        <fieldset x-show="role === 'reseller'" x-cloak class="rounded-md border border-slate-200 p-4 dark:border-slate-800">
+            <legend class="px-1 text-sm font-semibold text-slate-900 dark:text-white">{{ __('users.allocation') }}</legend>
+            <p class="tkj-hint mt-0 mb-3">{{ __('users.allocation_hint') }}</p>
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 @foreach ([
                     'alloc_max_users' => [__('users.alloc_max_users'), 5],
@@ -80,27 +86,27 @@
                     'alloc_max_databases' => [__('users.alloc_max_databases'), 10],
                 ] as $field => [$label, $default])
                     <div>
-                        <label class="mb-1 block text-xs font-medium text-slate-600 dark:text-slate-300">{{ $label }}</label>
-                        <input name="{{ $field }}" type="number" min="0" value="{{ old($field, $default) }}"
-                               class="block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+                        <label for="{{ $field }}" class="tkj-label">{{ $label }}</label>
+                        <input id="{{ $field }}" name="{{ $field }}" type="number" min="0" value="{{ old($field, $default) }}"
+                               class="tkj-input tabular-nums" @error($field) aria-invalid="true" @enderror>
+                        @error($field)<p class="tkj-error">{{ $message }}</p>@enderror
                     </div>
                 @endforeach
             </div>
-        </div>
+        </fieldset>
 
         <div>
-            <label class="mb-1 block text-sm font-medium">{{ __('common.phone') }} <span class="text-slate-400">({{ __('common.no') }} WA)</span></label>
-            <input name="phone" type="text" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx"
-                   class="block w-full max-w-xs rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950">
+            <label for="phone" class="tkj-label">{{ __('common.phone') }} <span class="font-normal text-slate-600 dark:text-slate-400">({{ __('users.phone_wa') }})</span></label>
+            <input id="phone" name="phone" type="text" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx"
+                   class="tkj-input max-w-xs" @error('phone') aria-invalid="true" @enderror>
+            @error('phone')<p class="tkj-error">{{ $message }}</p>@enderror
         </div>
 
-        <div class="rounded-lg bg-slate-50 px-4 py-3 text-xs text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
-            {{ __('users.linux_username_hint') }}
-        </div>
+        <p class="tkj-note">{{ __('users.linux_username_hint') }}</p>
 
-        <div class="flex items-center gap-3 pt-2">
-            <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">{{ __('common.create') }}</button>
-            <a href="{{ route('users.index') }}" class="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400">{{ __('common.cancel') }}</a>
+        <div class="flex flex-wrap items-center gap-3 pt-1">
+            <button type="submit" class="tkj-btn">{{ __('common.create') }}</button>
+            <a href="{{ route('users.index') }}" class="tkj-btn-secondary">{{ __('common.cancel') }}</a>
         </div>
     </form>
 @endsection

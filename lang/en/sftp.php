@@ -18,7 +18,7 @@ return [
     'home' => 'Chroot home',
     'reset_password' => 'Reset password',
 
-    'empty' => 'No SFTP accounts yet.',
+    'empty' => 'No SFTP accounts yet. An SFTP account gives file access locked to one folder in the owner\'s home.',
     'created' => 'SFTP account :name created.',
     'deleted' => 'SFTP account deleted.',
     'password_reset' => 'Password reset. Copy the new password now.',
@@ -29,5 +29,7 @@ return [
     'confirm_reset' => 'Generate a new password for this SFTP account?',
 
     'credentials_title' => 'SFTP credentials',
-    'credentials_warning' => 'Copy these now — the password will not be shown again.',
+    'credentials_warning' => 'Copy these now. The password will not be shown again.',
+    'copy' => 'Copy',
+    'copied' => 'Copied',
 ];

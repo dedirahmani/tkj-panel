@@ -3,64 +3,61 @@
 @section('title', __('cron.title'))
 
 @section('content')
-    <div class="mb-6 flex items-end justify-between gap-4">
-        <div>
-            <h2 class="text-xl font-bold tracking-tight">{{ __('cron.title') }}</h2>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ __('cron.subtitle') }}</p>
-        </div>
-        <a href="{{ route('cron.create') }}"
-           class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
+    <div class="mb-5 flex flex-wrap items-start justify-between gap-3">
+        <p class="tkj-intro">{{ __('cron.subtitle') }}</p>
+        <a href="{{ route('cron.create') }}" class="tkj-btn">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
             {{ __('cron.create') }}
         </a>
     </div>
 
     @if ($cronJobs->isEmpty())
-        <div class="rounded-xl border border-dashed border-slate-300 bg-white px-4 py-16 text-center dark:border-slate-700 dark:bg-slate-900">
-            <p class="text-sm text-slate-400">{{ __('cron.empty') }}</p>
+        <div class="tkj-panel tkj-empty">
+            <p>{{ __('cron.empty') }}</p>
+            <a href="{{ route('cron.create') }}" class="tkj-btn mt-4">{{ __('cron.create') }}</a>
         </div>
     @else
-        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <div class="tkj-panel overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
-                    <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+                <table class="tkj-table">
+                    <thead>
                         <tr>
-                            <th class="px-4 py-3 font-semibold">{{ __('cron.schedule') }}</th>
-                            <th class="px-4 py-3 font-semibold">{{ __('cron.command') }}</th>
-                            <th class="px-4 py-3 font-semibold">{{ __('cron.owner') }}</th>
-                            <th class="px-4 py-3 font-semibold">{{ __('common.status') }}</th>
-                            <th class="px-4 py-3 text-right font-semibold">{{ __('common.actions') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('cron.schedule') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('cron.command') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('cron.owner') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('common.status') }}</th>
+                            <th scope="col" class="tkj-th text-right">{{ __('common.actions') }}</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
                         @foreach ($cronJobs as $cron)
                             <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                                <td class="px-4 py-3">
-                                    <span class="font-mono text-xs">{{ $cron->expression }}</span>
+                                <td class="tkj-td">
+                                    <span class="tkj-code whitespace-nowrap text-slate-900 dark:text-white">{{ $cron->expression }}</span>
                                     @if ($cron->comment)
-                                        <p class="text-xs text-slate-400">{{ $cron->comment }}</p>
+                                        <p class="mt-0.5 text-xs text-slate-600 dark:text-slate-400">{{ $cron->comment }}</p>
                                     @endif
                                 </td>
-                                <td class="max-w-xs truncate px-4 py-3 font-mono text-xs text-slate-600 dark:text-slate-300" title="{{ $cron->command }}">{{ $cron->command }}</td>
-                                <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ $cron->owner->name }}</td>
-                                <td class="px-4 py-3">
+                                <td class="tkj-td max-w-xs truncate" title="{{ $cron->command }}"><span class="tkj-code text-slate-700 dark:text-slate-300">{{ $cron->command }}</span></td>
+                                <td class="tkj-td tkj-muted">{{ $cron->owner->name }}</td>
+                                <td class="tkj-td">
                                     @if ($cron->is_active)
-                                        <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>{{ __('common.active') }}</span>
+                                        <span class="tkj-badge bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300">{{ __('common.active') }}</span>
                                     @else
-                                        <span class="inline-flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400"><span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>{{ __('common.inactive') }}</span>
+                                        <span class="tkj-badge bg-slate-100 text-slate-700 dark:bg-slate-700/50 dark:text-slate-200">{{ __('common.inactive') }}</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3">
-                                    <div class="flex items-center justify-end gap-1.5">
+                                <td class="tkj-td">
+                                    <div class="flex items-center justify-end gap-1">
                                         <form method="POST" action="{{ route('cron.toggle', $cron) }}">
                                             @csrf @method('PATCH')
-                                            <button class="rounded-md px-2 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10">
+                                            <button type="submit" class="tkj-action-muted">
                                                 {{ $cron->is_active ? __('cron.deactivate') : __('cron.activate') }}
                                             </button>
                                         </form>
                                         <form method="POST" action="{{ route('cron.destroy', $cron) }}" onsubmit="return confirm(@js(__('cron.confirm_delete')))">
                                             @csrf @method('DELETE')
-                                            <button class="rounded-md px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10">{{ __('common.delete') }}</button>
+                                            <button type="submit" class="tkj-action-danger">{{ __('common.delete') }}</button>
                                         </form>
                                     </div>
                                 </td>

@@ -30,7 +30,7 @@ return [
     'reset_password' => 'Reset password',
     'access' => 'Akses remote',
 
-    'empty' => 'Belum ada database.',
+    'empty' => 'Belum ada database. Database baru membuat database MariaDB beserta penggunanya untuk satu pemilik.',
     'created' => 'Database :name dibuat.',
     'deleted' => 'Database dihapus.',
     'password_reset' => 'Password direset. Salin password baru sekarang.',
@@ -41,5 +41,7 @@ return [
     'confirm_reset' => 'Buat password baru untuk pengguna database ini?',
 
     'credentials_title' => 'Kredensial database',
-    'credentials_warning' => 'Salin sekarang — password tidak akan ditampilkan lagi.',
+    'credentials_warning' => 'Salin sekarang. Password tidak akan ditampilkan lagi.',
+    'copy' => 'Salin',
+    'copied' => 'Tersalin',
 ];

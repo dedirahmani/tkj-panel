@@ -38,10 +38,10 @@
     ];
 @endphp
 
-<nav class="flex flex-1 flex-col gap-6 overflow-y-auto px-3 py-4 text-sm">
+<nav aria-label="{{ __('common.main_nav') }}" class="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-4 text-sm">
     {{-- Hosting --}}
     <div>
-        <p class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('nav.section_hosting') }}</p>
+        <p class="px-3 pb-1.5 text-xs font-semibold text-navy-300">{{ __('nav.section_hosting') }}</p>
         <ul class="space-y-0.5">
             @foreach ($hosting as [$route, $label, $icon, $soon])
                 <li>
@@ -54,7 +54,7 @@
     {{-- Administrasi (admin & reseller) --}}
     @if ($user->canManageUsers())
         <div>
-            <p class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('nav.section_admin') }}</p>
+            <p class="px-3 pb-1.5 text-xs font-semibold text-navy-300">{{ __('nav.section_admin') }}</p>
             <ul class="space-y-0.5">
                 <li>@include('partials.nav-item', ['route' => 'users.index', 'label' => __('nav.users'), 'path' => $icons['users'], 'soon' => false])</li>
                 @if ($user->isSuperAdmin())
@@ -70,7 +70,7 @@
 
     {{-- Sistem --}}
     <div>
-        <p class="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{{ __('nav.section_system') }}</p>
+        <p class="px-3 pb-1.5 text-xs font-semibold text-navy-300">{{ __('nav.section_system') }}</p>
         <ul class="space-y-0.5">
             <li>@include('partials.nav-item', ['route' => 'jobs.index', 'label' => __('nav.jobs'), 'path' => $icons['jobs'], 'soon' => false])</li>
             <li>@include('partials.nav-item', ['route' => 'api-tokens.index', 'label' => __('nav.api'), 'path' => $icons['api'], 'soon' => false])</li>

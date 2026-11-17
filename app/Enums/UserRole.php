@@ -49,13 +49,16 @@ enum UserRole: string
         };
     }
 
-    /** Warna badge (kelas Tailwind) untuk UI. */
+    /**
+     * Warna badge (kelas Tailwind) untuk UI. Peran bukan status, jadi tidak memakai merah/kuning
+     * (DESIGN.md: warna status hanya untuk status). Tingkat akses dibedakan lewat kepekatan navy.
+     */
     public function badgeClasses(): string
     {
         return match ($this) {
-            self::SuperAdmin => 'bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300',
-            self::Reseller => 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
-            self::User => 'bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300',
+            self::SuperAdmin => 'bg-brand-600 text-white',
+            self::Reseller => 'bg-brand-100 text-brand-800 dark:bg-brand-500/20 dark:text-brand-300',
+            self::User => 'bg-slate-100 text-slate-700 dark:bg-slate-700/50 dark:text-slate-200',
         };
     }
 }

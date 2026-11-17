@@ -18,7 +18,9 @@ return [
     'download' => 'Download',
     'chmod' => 'chmod',
 
-    'empty' => 'This folder is empty.',
+    'empty' => 'This folder is empty. Upload a file or create a folder with the buttons above.',
+    'path' => 'Folder location',
+    'size_folder' => 'Folder',
     'folder_name' => 'Folder name',
     'rename_to' => 'New name',
     'mode' => 'Mode (octal)',

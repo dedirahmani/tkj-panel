@@ -13,7 +13,8 @@ return [
     'status' => 'Status',
     'suspend' => 'Suspend',
     'activate' => 'Activate',
-    'empty' => 'No users yet.',
+    'empty' => 'No users in your scope yet. Each new user gets a panel account and one isolated Linux user.',
+    'phone_wa' => 'WhatsApp number',
     'self' => 'you',
     'created' => 'User :name created.',
     'suspended' => 'User suspended.',
@@ -37,7 +38,7 @@ return [
     'reprovision' => 'Re-provision',
     'reprovision_hint' => 'Re-queue the Linux user, home, open_basedir and disk quota to the agent.',
     'sftp_accounts' => 'SFTP accounts',
-    'no_sftp' => 'No SFTP accounts.',
+    'no_sftp' => 'This user has no SFTP accounts yet.',
 
     // Reseller allocation
     'allocation' => 'Reseller allocation',

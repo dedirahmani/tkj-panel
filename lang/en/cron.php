@@ -21,7 +21,7 @@ return [
     'deactivate' => 'Deactivate',
     'next_run' => 'Next run',
 
-    'empty' => 'No cron jobs yet.',
+    'empty' => 'No cron jobs yet. A cron job runs a command on a schedule as the owner\'s Linux user.',
     'created' => 'Cron job created. The crontab has been queued to the agent.',
     'deleted' => 'Cron job deleted.',
     'quota_exceeded' => 'Quota reached: maximum :max cron jobs for this package.',

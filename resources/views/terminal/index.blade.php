@@ -3,15 +3,12 @@
 @section('title', __('terminal.title'))
 
 @section('content')
-    <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
-        <div>
-            <h2 class="text-xl font-bold tracking-tight">{{ __('terminal.title') }}</h2>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ __('terminal.subtitle') }}</p>
-        </div>
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <p class="tkj-intro">{{ __('terminal.subtitle') }}</p>
         @if ($owners->count() > 1)
-            <form method="GET" action="{{ route('terminal.index') }}">
-                <select name="owner" onchange="this.form.submit()"
-                        class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950">
+            <form method="GET" action="{{ route('terminal.index') }}" class="w-full sm:w-72">
+                <label for="terminal-owner" class="tkj-label">{{ __('terminal.owner') }}</label>
+                <select id="terminal-owner" name="owner" onchange="this.form.submit()" class="tkj-input">
                     @foreach ($owners as $o)
                         <option value="{{ $o->id }}" @selected($o->id === $owner->id)>{{ $o->name }} ({{ $o->linux_username }})</option>
                     @endforeach
@@ -20,24 +17,21 @@
         @endif
     </div>
 
-    <div class="rounded-xl border border-slate-200 bg-slate-950 p-3 dark:border-slate-800">
-        <div class="mb-2 flex items-center gap-2 px-1">
-            <span class="h-3 w-3 rounded-full bg-rose-500"></span>
-            <span class="h-3 w-3 rounded-full bg-amber-500"></span>
-            <span class="h-3 w-3 rounded-full bg-emerald-500"></span>
-            <span class="ml-2 font-mono text-xs text-slate-400">{{ $owner->linux_username }}@tkjpanel</span>
+    <section class="tkj-panel overflow-hidden" aria-label="{{ __('terminal.title') }}">
+        <div class="tkj-panel-head flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span class="tkj-code font-medium">{{ $owner->linux_username }}@tkjpanel</span>
             <div class="ml-auto flex items-center gap-2">
-                <button id="term-reconnect" type="button" class="hidden rounded border border-slate-700 px-2 py-0.5 font-mono text-xs text-slate-300 hover:bg-slate-800">{{ __('terminal.reconnect') }}</button>
-                <span id="term-status" class="font-mono text-xs text-slate-500">{{ __('terminal.disconnected') }}</span>
+                <span id="term-status" role="status" class="text-xs font-normal text-slate-600 dark:text-slate-400">{{ __('terminal.disconnected') }}</span>
+                <button id="term-reconnect" type="button" class="tkj-action hidden">{{ __('terminal.reconnect') }}</button>
             </div>
         </div>
-        <div id="terminal" class="h-[460px] overflow-hidden rounded-lg"></div>
-    </div>
+        {{-- Permukaan gelap terminal: sama dengan latar tema xterm (#020617). --}}
+        <div class="bg-slate-950 p-2 sm:p-3">
+            <div id="terminal" class="h-[460px] overflow-hidden"></div>
+        </div>
+    </section>
 
-    <p class="mt-3 flex items-center gap-1.5 text-xs text-slate-400">
-        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86l-8.48 14.7A1 1 0 002.7 20h18.6a1 1 0 00.87-1.5l-8.48-14.7a1 1 0 00-1.74 0z"/></svg>
-        {{ __('terminal.note') }}
-    </p>
+    <p class="mt-3 text-sm text-slate-600 dark:text-slate-400">{{ __('terminal.note') }}</p>
 
     {{-- cdnjs tidak menyediakan xterm 5.3.0 (404); paket npm resmi lewat jsDelivr. --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css">

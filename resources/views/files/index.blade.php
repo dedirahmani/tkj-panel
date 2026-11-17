@@ -3,15 +3,12 @@
 @section('title', __('files.title'))
 
 @section('content')
-    <div class="mb-5 flex flex-wrap items-end justify-between gap-4">
-        <div>
-            <h2 class="text-xl font-bold tracking-tight">{{ __('files.title') }}</h2>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ __('files.subtitle') }}</p>
-        </div>
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <p class="tkj-intro">{{ __('files.subtitle') }}</p>
         @if ($owners->count() > 1)
-            <form method="GET" action="{{ route('files.index') }}">
-                <select name="owner" onchange="this.form.submit()"
-                        class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950">
+            <form method="GET" action="{{ route('files.index') }}" class="w-full sm:w-72">
+                <label for="files-owner" class="tkj-label">{{ __('files.owner') }}</label>
+                <select id="files-owner" name="owner" onchange="this.form.submit()" class="tkj-input">
                     @foreach ($owners as $o)
                         <option value="{{ $o->id }}" @selected($o->id === $owner->id)>{{ $o->name }} ({{ $o->linux_username }})</option>
                     @endforeach
@@ -21,93 +18,105 @@
     </div>
 
     {{-- Toolbar: breadcrumb + aksi --}}
-    <div class="mb-4 flex flex-wrap items-center justify-between gap-3" x-data="{ mkdir: false }">
-        <nav class="flex items-center gap-1 text-sm">
-            <a href="{{ route('files.index', ['owner' => $owner->id]) }}" class="rounded px-2 py-1 font-medium text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-500/10">{{ __('files.root') }}</a>
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-3" x-data="{ mkdir: {{ $errors->has('name') ? 'true' : 'false' }} }">
+        <nav aria-label="{{ __('files.path') }}" class="flex min-w-0 flex-wrap items-center gap-0.5 text-sm">
+            <a href="{{ route('files.index', ['owner' => $owner->id]) }}" class="tkj-action -ml-2.5" @if (empty($crumbs)) aria-current="page" @endif>{{ __('files.root') }}</a>
             @foreach ($crumbs as $c)
-                <span class="text-slate-300">/</span>
-                <a href="{{ route('files.index', ['owner' => $owner->id, 'path' => $c['path']]) }}" class="rounded px-2 py-1 text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{{ $c['name'] }}</a>
+                <span class="text-slate-500 dark:text-slate-400" aria-hidden="true">/</span>
+                <a href="{{ route('files.index', ['owner' => $owner->id, 'path' => $c['path']]) }}" class="tkj-action-muted font-mono text-[13px]" @if ($loop->last) aria-current="page" @endif>{{ $c['name'] }}</a>
             @endforeach
         </nav>
-        <div class="flex items-center gap-2">
-            <button @click="mkdir = !mkdir" class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>{{ __('files.new_folder') }}
+        <div class="flex flex-wrap items-center gap-2">
+            <button type="button" @click="mkdir = !mkdir" :aria-expanded="mkdir" aria-controls="mkdir-form" class="tkj-btn-secondary">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>{{ __('files.new_folder') }}
             </button>
             <form method="POST" action="{{ route('files.upload') }}" enctype="multipart/form-data" class="flex items-center gap-2">
                 @csrf
                 <input type="hidden" name="owner" value="{{ $owner->id }}">
                 <input type="hidden" name="path" value="{{ $path }}">
-                <input type="file" name="file" required onchange="this.form.submit()" class="hidden" id="fileUpload">
-                <label for="fileUpload" class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-brand-700">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5 5 5M12 5v12"/></svg>{{ __('files.upload') }}
+                <input type="file" name="file" required onchange="this.form.submit()" class="peer sr-only" id="fileUpload">
+                <label for="fileUpload" class="tkj-btn cursor-pointer peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[rgb(var(--focus))]">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5 5 5M12 5v12"/></svg>{{ __('files.upload') }}
                 </label>
             </form>
         </div>
 
         {{-- Form buat folder --}}
-        <form method="POST" action="{{ route('files.mkdir') }}" x-show="mkdir" x-cloak class="flex w-full items-center gap-2">
+        <form id="mkdir-form" method="POST" action="{{ route('files.mkdir') }}" x-show="mkdir" x-cloak class="w-full">
             @csrf
             <input type="hidden" name="owner" value="{{ $owner->id }}">
             <input type="hidden" name="path" value="{{ $path }}">
-            <input name="name" type="text" required placeholder="{{ __('files.folder_name') }}"
-                   class="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-brand-500 dark:border-slate-700 dark:bg-slate-950">
-            <button type="submit" class="rounded-lg bg-brand-600 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-700">{{ __('common.create') }}</button>
+            <label for="mkdir-name" class="sr-only">{{ __('files.folder_name') }}</label>
+            <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <input id="mkdir-name" name="name" type="text" required placeholder="{{ __('files.folder_name') }}" value="{{ old('name') }}"
+                       class="tkj-input tkj-code sm:flex-1" @error('name') aria-invalid="true" @enderror>
+                <button type="submit" class="tkj-btn">{{ __('common.create') }}</button>
+            </div>
+            @error('name')<p class="tkj-error">{{ $message }}</p>@enderror
         </form>
     </div>
 
     @if ($listError)
-        <div class="mb-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300">{{ $listError }}</div>
+        <div role="alert" class="mb-4 rounded-md border border-rose-300 bg-rose-50 px-4 py-3 text-sm text-rose-900 dark:border-rose-500/40 dark:bg-rose-500/10 dark:text-rose-200">{{ $listError }}</div>
     @endif
 
-    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+    <div class="tkj-panel overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
-                <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
+            <table class="tkj-table">
+                <thead>
                     <tr>
-                        <th class="px-4 py-3 font-semibold">{{ __('files.name') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('files.size') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('files.modified') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('files.perms') }}</th>
-                        <th class="px-4 py-3 text-right font-semibold">{{ __('files.actions') }}</th>
+                        <th scope="col" class="tkj-th">{{ __('files.name') }}</th>
+                        <th scope="col" class="tkj-th">{{ __('files.size') }}</th>
+                        <th scope="col" class="tkj-th">{{ __('files.modified') }}</th>
+                        <th scope="col" class="tkj-th">{{ __('files.perms') }}</th>
+                        <th scope="col" class="tkj-th text-right">{{ __('files.actions') }}</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
                     @forelse ($entries as $e)
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                            <td class="px-4 py-3">
+                            <td class="tkj-td">
                                 @if ($e['type'] === 'dir')
-                                    <a href="{{ route('files.index', ['owner' => $owner->id, 'path' => $e['path']]) }}" class="inline-flex items-center gap-2 font-medium hover:text-brand-600">
-                                        <svg class="h-4 w-4 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-8l-2-2z"/></svg>
+                                    <a href="{{ route('files.index', ['owner' => $owner->id, 'path' => $e['path']]) }}" class="inline-flex items-center gap-2 font-mono text-[13px] font-medium text-slate-900 underline-offset-2 hover:text-brand-600 hover:underline dark:text-white dark:hover:text-brand-300">
+                                        <svg class="h-4 w-4 shrink-0 text-brand-600 dark:text-brand-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-8l-2-2z"/></svg>
                                         {{ $e['name'] }}
                                     </a>
                                 @else
-                                    <span class="inline-flex items-center gap-2">
-                                        <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/></svg>
+                                    <span class="inline-flex items-center gap-2 font-mono text-[13px] text-slate-900 dark:text-slate-100">
+                                        <svg class="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M7 3h7l5 5v13a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1z"/></svg>
                                         {{ $e['name'] }}
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">{{ $e['type'] === 'dir' ? '—' : \Illuminate\Support\Number::fileSize($e['size']) }}</td>
-                            <td class="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">{{ $e['modified'] }}</td>
-                            <td class="px-4 py-3">
-                                <button type="button" class="font-mono text-xs text-slate-500 hover:text-brand-600 dark:text-slate-400"
-                                        onclick="document.getElementById('chmod-{{ $loop->index }}').classList.toggle('hidden')">{{ $e['perms'] }}</button>
-                                <form id="chmod-{{ $loop->index }}" method="POST" action="{{ route('files.chmod') }}" class="mt-1 hidden items-center gap-1">
+                            <td class="tkj-td whitespace-nowrap">
+                                @if ($e['type'] === 'dir')
+                                    <span class="tkj-muted">{{ __('files.size_folder') }}</span>
+                                @else
+                                    <span class="tkj-code tkj-muted">{{ \Illuminate\Support\Number::fileSize($e['size']) }}</span>
+                                @endif
+                            </td>
+                            <td class="tkj-td tkj-muted whitespace-nowrap tabular-nums">{{ $e['modified'] }}</td>
+                            <td class="tkj-td">
+                                <button type="button" class="tkj-code -mx-1 rounded-sm px-1 text-slate-700 underline decoration-dotted underline-offset-4 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-300"
+                                        aria-controls="chmod-{{ $loop->index }}" aria-expanded="false"
+                                        title="{{ __('files.chmod') }}"
+                                        onclick="var f = document.getElementById('chmod-{{ $loop->index }}'); f.classList.toggle('hidden'); this.setAttribute('aria-expanded', f.classList.contains('hidden') ? 'false' : 'true')">{{ $e['perms'] }}</button>
+                                <form id="chmod-{{ $loop->index }}" method="POST" action="{{ route('files.chmod') }}" class="mt-1.5 flex hidden items-center gap-1.5">
                                     @csrf
                                     <input type="hidden" name="owner" value="{{ $owner->id }}">
                                     <input type="hidden" name="path" value="{{ $e['path'] }}">
                                     <input type="hidden" name="dir" value="{{ $path }}">
-                                    <input name="mode" value="{{ substr($e['perms'], -3) }}" class="w-16 rounded border border-slate-300 px-1 py-0.5 text-xs dark:border-slate-700 dark:bg-slate-950">
-                                    <button class="rounded bg-brand-600 px-1.5 py-0.5 text-[10px] text-white">OK</button>
+                                    <input name="mode" value="{{ substr($e['perms'], -3) }}" aria-label="{{ __('files.mode') }}" inputmode="numeric" class="tkj-input tkj-code w-20 py-1.5">
+                                    <button type="submit" class="tkj-btn px-3">OK</button>
                                 </form>
                             </td>
-                            <td class="px-4 py-3">
-                                <div class="flex items-center justify-end gap-1.5">
+                            <td class="tkj-td">
+                                <div class="flex items-center justify-end gap-1">
                                     @if ($e['type'] === 'file')
                                         @if ($e['editable'])
-                                            <a href="{{ route('files.edit', ['owner' => $owner->id, 'path' => $e['path']]) }}" class="rounded-md px-2 py-1 text-xs font-medium text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-500/10">{{ __('files.edit') }}</a>
+                                            <a href="{{ route('files.edit', ['owner' => $owner->id, 'path' => $e['path']]) }}" class="tkj-action">{{ __('files.edit') }}</a>
                                         @endif
-                                        <a href="{{ route('files.download', ['owner' => $owner->id, 'path' => $e['path']]) }}" class="rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{{ __('files.download') }}</a>
+                                        <a href="{{ route('files.download', ['owner' => $owner->id, 'path' => $e['path']]) }}" class="tkj-action-muted">{{ __('files.download') }}</a>
                                     @endif
                                     <form method="POST" action="{{ route('files.rename') }}"
                                           onsubmit="var n=prompt(@js(__('files.rename_to')), '{{ $e['name'] }}'); if(!n) return false; this.to.value = @js($path ? $path.'/' : '') + n;">
@@ -116,25 +125,25 @@
                                         <input type="hidden" name="from" value="{{ $e['path'] }}">
                                         <input type="hidden" name="to" value="">
                                         <input type="hidden" name="dir" value="{{ $path }}">
-                                        <button class="rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{{ __('files.rename') }}</button>
+                                        <button type="submit" class="tkj-action-muted whitespace-nowrap">{{ __('files.rename') }}</button>
                                     </form>
                                     <form method="POST" action="{{ route('files.delete') }}" onsubmit="return confirm(@js(__('files.confirm_delete')))">
                                         @csrf @method('DELETE')
                                         <input type="hidden" name="owner" value="{{ $owner->id }}">
                                         <input type="hidden" name="path" value="{{ $e['path'] }}">
                                         <input type="hidden" name="dir" value="{{ $path }}">
-                                        <button class="rounded-md px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10">{{ __('common.delete') }}</button>
+                                        <button type="submit" class="tkj-action-danger">{{ __('common.delete') }}</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-4 py-12 text-center text-sm text-slate-400">{{ __('files.empty') }}</td></tr>
+                        <tr><td colspan="5" class="tkj-empty">{{ __('files.empty') }}</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 
-    <p class="mt-3 text-xs text-slate-400">{{ __('files.driver_note') }}</p>
+    <p class="tkj-hint mt-3">{{ __('files.driver_note') }}</p>
 @endsection

@@ -3,95 +3,87 @@
 @section('title', __('security.title'))
 
 @section('content')
-    <div class="mb-6">
-        <h2 class="text-xl font-bold tracking-tight">{{ __('security.title') }}</h2>
-        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ __('security.subtitle') }}</p>
-    </div>
+    <p class="tkj-intro mb-5">{{ __('security.subtitle') }}</p>
 
-    <div class="max-w-2xl rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
-        <div class="mb-4 flex items-start justify-between gap-4">
-            <div>
-                <h3 class="font-semibold">{{ __('security.twofa') }}</h3>
-                <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ __('security.twofa_intro') }}</p>
-            </div>
+    <section aria-labelledby="twofa-heading" class="tkj-panel max-w-2xl">
+        <div class="tkj-panel-head flex flex-wrap items-center justify-between gap-2">
+            <h2 id="twofa-heading">{{ __('security.twofa') }}</h2>
             @if ($enabled)
-                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">
-                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>{{ __('security.twofa_enabled') }}
-                </span>
+                <span class="tkj-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">{{ __('security.twofa_enabled') }}</span>
             @else
-                <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-500 dark:bg-slate-800 dark:text-slate-400">
-                    <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>{{ __('security.twofa_disabled') }}
-                </span>
+                <span class="tkj-badge bg-slate-100 text-slate-700 dark:bg-slate-700/50 dark:text-slate-200">{{ __('security.twofa_disabled') }}</span>
             @endif
         </div>
 
-        {{-- Belum aktif: tombol enable --}}
-        @if (! $enabled && ! $pending)
-            <form method="POST" action="{{ url('/user/two-factor-authentication') }}">
-                @csrf
-                <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
-                    {{ __('security.enable') }}
-                </button>
-            </form>
-        @endif
+        <div class="tkj-panel-body">
+            <p class="tkj-muted text-sm">{{ __('security.twofa_intro') }}</p>
 
-        {{-- Pending / aktif: QR, setup key, recovery codes --}}
-        @if ($pending || $enabled)
-            <div class="mt-4 space-y-5 border-t border-slate-100 pt-5 dark:border-slate-800">
-                @if ($pending)
-                    <p class="text-sm text-slate-600 dark:text-slate-300">{{ __('security.scan_qr') }}</p>
-                @endif
+            {{-- Belum aktif: tombol enable --}}
+            @if (! $enabled && ! $pending)
+                <form method="POST" action="{{ url('/user/two-factor-authentication') }}" class="mt-4">
+                    @csrf
+                    <button type="submit" class="tkj-btn">{{ __('security.enable') }}</button>
+                </form>
+            @endif
 
-                <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
-                    <div class="inline-block rounded-lg bg-white p-3 ring-1 ring-slate-200 dark:ring-slate-700">
-                        {!! $qrSvg !!}
-                    </div>
-                    <div class="flex-1">
-                        <p class="mb-1 text-xs font-medium text-slate-500 dark:text-slate-400">{{ __('security.setup_key') }}</p>
-                        <code class="block break-all rounded-lg bg-slate-100 px-3 py-2 text-sm dark:bg-slate-800">{{ $setupKey }}</code>
-                    </div>
-                </div>
+            {{-- Pending / aktif: QR, setup key, recovery codes --}}
+            @if ($pending || $enabled)
+                <div class="mt-4 space-y-5 border-t border-slate-200 pt-5 dark:border-slate-800">
+                    @if ($pending)
+                        <p class="text-sm text-slate-700 dark:text-slate-300">{{ __('security.scan_qr') }}</p>
+                    @endif
 
-                {{-- Konfirmasi kode saat masih pending --}}
-                @if ($pending)
-                    <form method="POST" action="{{ url('/user/confirmed-two-factor-authentication') }}" class="flex flex-wrap items-end gap-3">
-                        @csrf
-                        <div>
-                            <label class="mb-1 block text-sm font-medium">{{ __('security.code') }}</label>
-                            <input name="code" type="text" inputmode="numeric" autocomplete="one-time-code" required
-                                   class="w-40 rounded-lg border border-slate-300 bg-white px-3 py-2 text-center tracking-[0.3em] outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 dark:border-slate-700 dark:bg-slate-950"
-                                   placeholder="000000">
+                    <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
+                        {{-- QR selalu di latar putih agar terbaca pemindai, juga di mode gelap. --}}
+                        <div class="inline-block self-start rounded-md border border-slate-200 bg-white p-3 dark:border-slate-700">
+                            {!! $qrSvg !!}
                         </div>
-                        <button type="submit" class="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">{{ __('security.confirm') }}</button>
-                    </form>
-                @endif
-
-                {{-- Recovery codes --}}
-                <div>
-                    <p class="mb-1 text-sm font-medium">{{ __('security.recovery_codes') }}</p>
-                    <p class="mb-2 text-xs text-slate-500 dark:text-slate-400">{{ __('security.recovery_intro') }}</p>
-                    <div class="grid grid-cols-2 gap-1.5 rounded-lg bg-slate-100 p-3 font-mono text-xs dark:bg-slate-800">
-                        @foreach ($recoveryCodes as $code)
-                            <span>{{ $code }}</span>
-                        @endforeach
+                        <div class="min-w-0 flex-1">
+                            <p class="mb-1.5 text-sm font-medium text-slate-800 dark:text-slate-200">{{ __('security.setup_key') }}</p>
+                            <code class="block break-all rounded-md bg-slate-100 px-3 py-2 font-mono text-[13px] text-slate-900 dark:bg-slate-800 dark:text-slate-100">{{ $setupKey }}</code>
+                        </div>
                     </div>
-                    <form method="POST" action="{{ url('/user/two-factor-recovery-codes') }}" class="mt-2">
-                        @csrf
-                        <button type="submit" class="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400">{{ __('security.regenerate_recovery') }}</button>
-                    </form>
-                </div>
 
-                {{-- Disable --}}
-                <div class="border-t border-slate-100 pt-4 dark:border-slate-800">
-                    <form method="POST" action="{{ url('/user/two-factor-authentication') }}"
-                          onsubmit="return confirm(@js(__('security.disable')) + '?')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="rounded-lg border border-rose-200 px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 dark:border-rose-500/30 dark:hover:bg-rose-500/10">
-                            {{ __('security.disable') }}
-                        </button>
-                    </form>
+                    {{-- Konfirmasi kode saat masih pending --}}
+                    @if ($pending)
+                        <form method="POST" action="{{ url('/user/confirmed-two-factor-authentication') }}" class="flex flex-wrap items-end gap-3">
+                            @csrf
+                            <div>
+                                <label for="code" class="tkj-label">{{ __('security.code') }}</label>
+                                <input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" required
+                                       class="tkj-input w-40 text-center font-mono tracking-[0.3em]"
+                                       placeholder="000000" @error('code', 'confirmTwoFactorAuthentication') aria-invalid="true" @enderror>
+                            </div>
+                            <button type="submit" class="tkj-btn">{{ __('security.confirm') }}</button>
+                            @error('code', 'confirmTwoFactorAuthentication')<p class="tkj-error w-full">{{ $message }}</p>@enderror
+                        </form>
+                    @endif
+
+                    {{-- Recovery codes --}}
+                    <div>
+                        <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{{ __('security.recovery_codes') }}</h3>
+                        <p class="tkj-hint mb-2 mt-1">{{ __('security.recovery_intro') }}</p>
+                        <ul class="grid grid-cols-1 gap-1.5 rounded-md bg-slate-100 p-3 font-mono text-[13px] text-slate-900 dark:bg-slate-800 dark:text-slate-100 min-[400px]:grid-cols-2">
+                            @foreach ($recoveryCodes as $code)
+                                <li class="break-all">{{ $code }}</li>
+                            @endforeach
+                        </ul>
+                        <form method="POST" action="{{ url('/user/two-factor-recovery-codes') }}" class="mt-1">
+                            @csrf
+                            <button type="submit" class="tkj-link inline-flex min-h-[44px] items-center text-sm">{{ __('security.regenerate_recovery') }}</button>
+                        </form>
+                    </div>
+
+                    {{-- Disable --}}
+                    <div class="border-t border-slate-200 pt-4 dark:border-slate-800">
+                        <form method="POST" action="{{ url('/user/two-factor-authentication') }}"
+                              onsubmit="return confirm(@js(__('security.disable')) + '?')">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="tkj-btn-secondary text-rose-700 dark:text-rose-400">{{ __('security.disable') }}</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
-        @endif
-    </div>
+            @endif
+        </div>
+    </section>
 @endsection

@@ -3,32 +3,35 @@
 <head>
     @include('partials.head')
 </head>
-<body class="h-full bg-slate-100 text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
-    <div class="flex min-h-full flex-col items-center justify-center px-4 py-12">
-        <div class="w-full max-w-md">
-            {{-- Merek --}}
-            <div class="mb-8 flex flex-col items-center text-center">
-                <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-600/30">
-                    <svg class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M5 6h14M5 18h14"/></svg>
-                </div>
-                <h1 class="text-2xl font-bold tracking-tight">{{ __('common.app_name') }}</h1>
-                <p class="text-sm text-slate-500 dark:text-slate-400">{{ __('common.tagline') }}</p>
+<body class="flex min-h-full flex-col bg-slate-50 font-sans text-slate-800 antialiased dark:bg-slate-950 dark:text-slate-200">
+    {{-- Bilah navy yang sama dengan bingkai sidebar di dalam panel: orang langsung tahu ini TKJPanel. --}}
+    <header class="bg-navy-900">
+        <div class="mx-auto flex max-w-md items-center justify-between gap-3 px-4 py-3">
+            <div class="min-w-0 leading-tight">
+                <p class="text-base font-semibold text-white">{{ __('common.app_name') }}</p>
+                <p class="truncate text-xs text-navy-300">{{ __('common.tagline') }}</p>
             </div>
+            <a href="{{ route('locale.switch', app()->getLocale() === 'id' ? 'en' : 'id') }}"
+               lang="{{ app()->getLocale() === 'id' ? 'en' : 'id' }}"
+               class="inline-flex min-h-[44px] items-center rounded-md px-3 text-sm font-medium text-navy-200 hover:bg-navy-800 hover:text-white">
+                <span class="sr-only">{{ __('common.language') }}:</span>
+                {{ app()->getLocale() === 'id' ? 'English' : 'Bahasa Indonesia' }}
+            </a>
+        </div>
+    </header>
 
-            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8">
+    <main class="flex flex-1 justify-center px-4 py-10 sm:py-16">
+        <div class="w-full max-w-md">
+            <div class="rounded-lg border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 sm:p-8">
                 @include('partials.flash')
                 @yield('content')
             </div>
 
-            <div class="mt-6 flex items-center justify-center gap-3">
-                @include('partials.language-switcher')
+            <div class="mt-4 flex items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
+                <p>TKJ SMKN 1 Tanah Grogot &middot; GPLv3</p>
                 @include('partials.theme-toggle')
             </div>
-
-            <p class="mt-6 text-center text-xs text-slate-400">
-                {{ __('common.app_name') }} &middot; TKJ SMKN 1 Tanah Grogot &middot; GPLv3
-            </p>
         </div>
-    </div>
+    </main>
 </body>
 </html>

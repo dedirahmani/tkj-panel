@@ -3,87 +3,86 @@
 @section('title', __('users.title'))
 
 @section('content')
-    <div class="mb-6 flex items-end justify-between gap-4">
-        <div>
-            <h2 class="text-xl font-bold tracking-tight">{{ __('users.title') }}</h2>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">{{ __('users.subtitle') }}</p>
-        </div>
-        <a href="{{ route('users.create') }}"
-           class="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
+    <div class="mb-5 flex flex-wrap items-start justify-between gap-3">
+        <p class="tkj-intro">{{ __('users.subtitle') }}</p>
+        <a href="{{ route('users.create') }}" class="tkj-btn">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14M5 12h14"/></svg>
             {{ __('users.create') }}
         </a>
     </div>
 
-    <div class="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
-                <thead class="bg-slate-50 text-left text-xs uppercase tracking-wider text-slate-500 dark:bg-slate-800/50 dark:text-slate-400">
-                    <tr>
-                        <th class="px-4 py-3 font-semibold">{{ __('common.name') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('users.role') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('users.linux_username') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('users.package') }}</th>
-                        <th class="px-4 py-3 font-semibold">{{ __('common.status') }}</th>
-                        <th class="px-4 py-3 text-right font-semibold">{{ __('common.actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                    @forelse ($users as $u)
-                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                            <td class="px-4 py-3">
-                                <a href="{{ route('users.show', $u) }}" class="font-medium hover:text-brand-600 hover:underline">{{ $u->name }}</a>
-                                <p class="text-xs text-slate-400">{{ $u->email }}</p>
-                            </td>
-                            <td class="px-4 py-3">
-                                <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold {{ $u->role->badgeClasses() }}">
-                                    {{ $u->role->label() }}
-                                </span>
-                            </td>
-                            <td class="px-4 py-3 font-mono text-xs text-slate-500 dark:text-slate-400">{{ $u->linux_username ?? '—' }}</td>
-                            <td class="px-4 py-3 text-slate-500 dark:text-slate-400">{{ $u->package?->name ?? '—' }}</td>
-                            <td class="px-4 py-3">
-                                @if ($u->is_active)
-                                    <span class="inline-flex items-center gap-1 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>{{ __('common.active') }}
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center gap-1 text-xs font-medium text-rose-600 dark:text-rose-400">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>{{ __('common.suspended') }}
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3">
-                                <div class="flex items-center justify-end gap-1.5">
-                                    <a href="{{ route('users.show', $u) }}" class="rounded-md px-2 py-1 text-xs font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{{ __('users.view') }}</a>
-                                    @if ($u->is_active)
-                                        <form method="POST" action="{{ route('users.suspend', $u) }}">
-                                            @csrf @method('PATCH')
-                                            <button class="rounded-md px-2 py-1 text-xs font-medium text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-500/10">{{ __('users.suspend') }}</button>
-                                        </form>
-                                    @else
-                                        <form method="POST" action="{{ route('users.activate', $u) }}">
-                                            @csrf @method('PATCH')
-                                            <button class="rounded-md px-2 py-1 text-xs font-medium text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-500/10">{{ __('users.activate') }}</button>
-                                        </form>
-                                    @endif
-                                    <form method="POST" action="{{ route('users.destroy', $u) }}"
-                                          onsubmit="return confirm(@js(__('users.confirm_delete')))">
-                                        @csrf @method('DELETE')
-                                        <button class="rounded-md px-2 py-1 text-xs font-medium text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10">{{ __('common.delete') }}</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="6" class="px-4 py-10 text-center text-sm text-slate-400">{{ __('users.empty') }}</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+    @if ($users->isEmpty())
+        <div class="tkj-panel tkj-empty">
+            <p>{{ __('users.empty') }}</p>
+            <a href="{{ route('users.create') }}" class="tkj-btn mt-4">{{ __('users.create') }}</a>
         </div>
-    </div>
+    @else
+        <div class="tkj-panel overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="tkj-table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="tkj-th">{{ __('common.name') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('users.role') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('users.linux_username') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('users.package') }}</th>
+                            <th scope="col" class="tkj-th">{{ __('common.status') }}</th>
+                            <th scope="col" class="tkj-th text-right">{{ __('common.actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+                        @foreach ($users as $u)
+                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                                <td class="tkj-td">
+                                    <a href="{{ route('users.show', $u) }}" class="font-medium text-slate-900 underline-offset-2 hover:text-brand-600 hover:underline dark:text-white dark:hover:text-brand-300">{{ $u->name }}</a>
+                                    <span class="tkj-code block text-xs text-slate-600 dark:text-slate-400">{{ $u->email }}</span>
+                                </td>
+                                <td class="tkj-td">
+                                    <span class="tkj-badge {{ $u->role->badgeClasses() }}">{{ $u->role->label() }}</span>
+                                </td>
+                                <td class="tkj-td">
+                                    @if ($u->linux_username)
+                                        <span class="tkj-code">{{ $u->linux_username }}</span>
+                                    @else
+                                        <span class="tkj-muted">{{ __('common.none') }}</span>
+                                    @endif
+                                </td>
+                                <td class="tkj-td tkj-muted">{{ $u->package?->name ?? __('common.none') }}</td>
+                                <td class="tkj-td">
+                                    @if ($u->is_active)
+                                        <span class="tkj-badge bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">{{ __('common.active') }}</span>
+                                    @else
+                                        <span class="tkj-badge bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">{{ __('common.suspended') }}</span>
+                                    @endif
+                                </td>
+                                <td class="tkj-td">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <a href="{{ route('users.show', $u) }}" class="tkj-action-muted">{{ __('users.view') }}</a>
+                                        @if ($u->is_active)
+                                            <form method="POST" action="{{ route('users.suspend', $u) }}">
+                                                @csrf @method('PATCH')
+                                                <button class="tkj-action-muted">{{ __('users.suspend') }}</button>
+                                            </form>
+                                        @else
+                                            <form method="POST" action="{{ route('users.activate', $u) }}">
+                                                @csrf @method('PATCH')
+                                                <button class="tkj-action">{{ __('users.activate') }}</button>
+                                            </form>
+                                        @endif
+                                        <form method="POST" action="{{ route('users.destroy', $u) }}"
+                                              onsubmit="return confirm(@js(__('users.confirm_delete')))">
+                                            @csrf @method('DELETE')
+                                            <button class="tkj-action-danger">{{ __('common.delete') }}</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
 
     <div class="mt-4">{{ $users->links() }}</div>
 @endsection

@@ -2,10 +2,11 @@
 
 return [
     'title' => 'Cloudflare',
-    'subtitle' => 'Kelola DNS record dan sediakan Cloudflare Tunnel — integrasi khas TKJPanel.',
+    'subtitle' => 'Kelola DNS record dan sediakan Cloudflare Tunnel untuk server ini.',
     'token' => 'Token API',
     'token_stored' => 'Token sudah tersimpan. Kosongkan untuk mempertahankannya.',
     'account_id' => 'Account ID',
+    'credentials' => 'Kredensial API',
     'not_configured' => 'Tambahkan token API Cloudflare untuk mengelola DNS dan tunnel.',
 
     'dns' => 'DNS record',
@@ -19,6 +20,7 @@ return [
     'dns_created' => 'DNS record dibuat.',
     'dns_deleted' => 'DNS record dihapus.',
     'no_records' => 'Belum ada record dimuat. Masukkan Zone ID lalu muat.',
+    'zone_needed' => 'Muat Zone ID dulu agar record tahu zone tujuannya.',
 
     'tunnels' => 'Tunnel',
     'new_tunnel' => 'Tunnel baru',
@@ -27,8 +29,10 @@ return [
     'status' => 'Status',
     'tunnel_queued' => 'Hostname ditambahkan ke tunnel; agent memasang konektor di server.',
     'tunnel_deleted' => 'Tunnel dihapus.',
-    'empty_tunnels' => 'Belum ada tunnel.',
+    'empty_tunnels' => 'Belum ada hostname yang diarahkan lewat tunnel. Isi hostname publik di atas untuk membuat yang pertama.',
+    'target' => 'Tujuan',
     'confirm_delete_tunnel' => 'Hapus tunnel ini?',
+    'confirm_delete_record' => 'Hapus record DNS :name dari Cloudflare? Tindakan ini tidak bisa dibatalkan.',
     'tunnel_hint' => 'Satu tunnel untuk server ini; setiap hostname diarahkan ke situs atau ke panel. DNS (CNAME) dibuat otomatis. Token API butuh izin Cloudflare Tunnel: Edit dan DNS: Edit.',
     'tunnel_needs_account' => 'Isi Account ID Cloudflare (dan token API dengan izin Tunnel + DNS) untuk memakai tunnel.',
     'target_panel' => 'Panel TKJPanel (termasuk terminal web)',

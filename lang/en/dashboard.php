@@ -2,20 +2,45 @@
 
 return [
     'title' => 'Dashboard',
-    'welcome' => 'Welcome back, :name',
-    'your_role' => 'Your role',
-    'your_package' => 'Your package',
-    'no_package' => 'No package assigned',
-    'agent_status' => 'Agent status',
-    'agent_offline' => 'Not connected (deploy on Linux server)',
-    'agent_note' => 'The root daemon runs only on the Linux target host.',
 
-    'stat_users' => 'Managed users',
-    'stat_sites' => 'Sites',
-    'stat_databases' => 'Databases',
-    'stat_jobs_pending' => 'Pending jobs',
+    // Server status
+    'status_heading' => 'Server status',
+    'agent' => 'Agent',
+    'agent_ok' => 'Processing the queue. Last job finished :time.',
+    'agent_unknown' => 'No job has finished yet, so the agent cannot be confirmed working. Status appears after the first job, for example when you create a site.',
+    'agent_stalled' => ':count job(s) waiting more than :minutes minutes without being picked up by the agent.',
+    'agent_stalled_hint' => 'Check the agent service on the server:',
+    'agent_running' => ':count job(s) running.',
+    'resources' => 'Resources',
+    'metrics_measured' => 'Measured :time.',
+    'metrics_stale' => 'This data is old; metric collection may have stopped.',
+    'metrics_none' => 'No metrics from the server yet.',
+    'open_monitoring' => 'Open Monitoring',
+    'cpu' => 'CPU',
+    'ram' => 'RAM',
+    'disk' => 'Disk',
 
-    'quota_title' => 'Quota (from package)',
+    // Needs attention
+    'attention_heading' => 'Needs attention',
+    'attention_empty' => 'Nothing needs attention.',
+    'attention_empty_hint' => 'Jobs that failed in the last 24 hours and SSL certificates that failed or expire within :days days will show up here.',
+    'failed_job' => 'Failed job',
+    'cert_expiring' => 'SSL expires :time',
+    'cert_failed' => 'SSL issuance failed',
+    'cert_expired' => 'SSL expired',
+    'view_jobs' => 'View job queue',
+    'view_ssl' => 'Open SSL',
+
+    // Summary
+    'summary_heading' => 'Summary',
+    'count_sites' => 'Sites',
+    'count_databases' => 'Databases',
+    'count_users' => 'Managed users',
+    'count_jobs_pending' => 'Jobs waiting',
+
+    // Package
+    'package_heading' => 'Package limits',
+    'no_package' => 'This account has no package yet.',
     'quota_disk' => 'Disk',
     'quota_domains' => 'Domains',
     'quota_subdomains' => 'Subdomains',
@@ -23,8 +48,8 @@ return [
     'quota_cronjobs' => 'Cron jobs',
     'quota_bandwidth' => 'Bandwidth / month',
 
+    // Activity
     'recent_activity' => 'Recent activity',
-    'no_activity' => 'No activity recorded yet.',
-    'mvp_note' => 'Foundation build',
-    'mvp_note_body' => 'Auth + 2FA, RBAC, i18n, audit log, SQLite schema and the panel to agent job protocol are in place. Feature modules (sites, DB, SSL, files, monitoring...) build on top of this.',
+    'no_activity' => 'No activity recorded yet. Changes made in the panel will show up here.',
+    'view_audit' => 'Open audit log',
 ];

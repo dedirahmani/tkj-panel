@@ -9,5 +9,5 @@ return [
     'description' => 'Deskripsi',
     'ip' => 'Alamat IP',
     'when' => 'Waktu',
-    'empty' => 'Belum ada entri audit.',
+    'empty' => 'Belum ada entri audit. Entri ditambahkan otomatis setiap kali ada aksi yang tercatat di panel.',
 ];

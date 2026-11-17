@@ -16,7 +16,7 @@ return [
     'bandwidth' => 'Bandwidth (MB/bulan)',
     'default' => 'Default',
     'is_default' => 'Jadikan paket default',
-    'empty' => 'Belum ada paket.',
+    'empty' => 'Belum ada paket. Paket menentukan kuota disk, domain, dan database yang bisa diberikan ke pengguna.',
     'created' => 'Paket :name dibuat.',
     'users_count' => ':count pengguna',
 ];

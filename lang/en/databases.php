@@ -30,7 +30,7 @@ return [
     'reset_password' => 'Reset password',
     'access' => 'Remote access',
 
-    'empty' => 'No databases yet.',
+    'empty' => 'No databases yet. A new database creates a MariaDB database and its user for one owner.',
     'created' => 'Database :name created.',
     'deleted' => 'Database deleted.',
     'password_reset' => 'Password reset. Copy the new password now.',
@@ -41,5 +41,7 @@ return [
     'confirm_reset' => 'Generate a new password for this database user?',
 
     'credentials_title' => 'Database credentials',
-    'credentials_warning' => 'Copy these now — the password will not be shown again.',
+    'credentials_warning' => 'Copy these now. The password will not be shown again.',
+    'copy' => 'Copy',
+    'copied' => 'Copied',
 ];

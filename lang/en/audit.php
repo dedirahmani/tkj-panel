@@ -9,5 +9,5 @@ return [
     'description' => 'Description',
     'ip' => 'IP address',
     'when' => 'When',
-    'empty' => 'No audit entries yet.',
+    'empty' => 'No audit entries yet. Entries are added automatically whenever the panel records an action.',
 ];
