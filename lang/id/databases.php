@@ -1,0 +1,45 @@
+<?php
+
+return [
+    'title' => 'Database',
+    'subtitle' => 'Database MariaDB dan penggunanya. Password ditampilkan sekali dan tidak pernah disimpan.',
+    'create' => 'Database baru',
+    'create_title' => 'Buat database',
+
+    'name' => 'Nama database',
+    'name_hint' => 'Huruf, angka, dan garis bawah. Otomatis diberi prefix username pemilik.',
+    'db_user' => 'Pengguna database',
+    'db_user_hint' => 'Opsional. Default mengikuti nama database.',
+    'password' => 'Password',
+    'password_hint' => 'Kosongkan untuk membuat password kuat otomatis.',
+    'owner' => 'Pemilik',
+    'owner_no_linux' => 'Pemilik yang dipilih belum punya user Linux.',
+    'host' => 'Host',
+    'remote_access' => 'Izinkan akses remote',
+    'remote_access_hint' => 'Aktifkan koneksi dari luar localhost (batasi dengan IP di bawah).',
+    'allowed_ips' => 'IP diizinkan',
+    'allowed_ips_hint' => 'Whitelist IP/CIDR opsional untuk akses remote, dipisah koma atau spasi.',
+
+    'adminer' => 'Adminer',
+    'open_adminer' => 'Buka Adminer',
+    'adminer_hint' => 'Adminer (antarmuka database ringan) belum terpasang.',
+    'adminer_setup' => 'Pasang Adminer',
+    'adminer_missing_title' => 'Adminer belum terpasang',
+    'adminer_missing_body' => 'Adminer adalah pengelola database 1-file (seperti phpMyAdmin, tapi lebih ringan). Jalankan sekali di server untuk mengaktifkannya:',
+    'adminer_missing_note' => 'Perintah ini mengunduh Adminer resmi ke storage dan hanya disajikan di balik login panel. Anda lalu masuk memakai kredensial database Anda.',
+    'reset_password' => 'Reset password',
+    'access' => 'Akses remote',
+
+    'empty' => 'Belum ada database.',
+    'created' => 'Database :name dibuat.',
+    'deleted' => 'Database dihapus.',
+    'password_reset' => 'Password direset. Salin password baru sekarang.',
+    'quota_exceeded' => 'Kuota tercapai: maksimal :max database untuk paket ini.',
+    'name_taken' => 'Database dengan nama ini sudah ada.',
+    'user_taken' => 'Pengguna database dengan nama ini sudah ada.',
+    'confirm_delete' => 'Hapus database ini beserta penggunanya? Semua data akan hilang.',
+    'confirm_reset' => 'Buat password baru untuk pengguna database ini?',
+
+    'credentials_title' => 'Kredensial database',
+    'credentials_warning' => 'Salin sekarang — password tidak akan ditampilkan lagi.',
+];

@@ -1,0 +1,34 @@
+[Unit]
+Description=TKJPanel root agent (tkjpanel-agentd)
+After=network.target
+
+[Service]
+Type=simple
+# Agent butuh root untuk useradd/nginx/systemctl, tetapi di-hardening ketat.
+User=root
+Environment=TKJPANEL_ROOT=/opt/tkjpanel
+Environment=TKJPANEL_POLL_INTERVAL=2s
+# Terminal web (websocket -> PTY). Hanya lokal; publikasikan lewat reverse proxy /pty.
+Environment=TKJPANEL_TERMINAL_LISTEN=127.0.0.1:7681
+ExecStart=/usr/local/bin/tkjpanel-agentd
+Restart=on-failure
+RestartSec=3
+
+# --- Hardening (PRD 8: least-privilege, defense-in-depth) ---
+NoNewPrivileges=true
+# ProtectSystem=true (bukan strict): useradd/crontab/MariaDB/acme.sh perlu menulis ke
+# /etc, /var, /run, dan /root/.acme.sh. /usr & /boot tetap read-only.
+ProtectSystem=true
+ProtectHome=false
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+# Log terpisah dari panel (PRD 10: log agent terpisah, rotasi otomatis).
+StandardOutput=append:/var/log/tkjpanel/agentd.log
+StandardError=append:/var/log/tkjpanel/agentd.err.log
+
+[Install]
+WantedBy=multi-user.target

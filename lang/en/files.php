@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'title' => 'File Manager',
+    'subtitle' => 'Browse and edit files, jailed to each user\'s home. Permission/owner changes go through the agent.',
+    'owner' => 'Owner',
+    'root' => 'Home',
+    'new_folder' => 'New folder',
+    'upload' => 'Upload',
+    'name' => 'Name',
+    'size' => 'Size',
+    'modified' => 'Modified',
+    'perms' => 'Perms',
+    'actions' => 'Actions',
+    'edit' => 'Edit',
+    'rename' => 'Rename',
+    'delete' => 'Delete',
+    'download' => 'Download',
+    'chmod' => 'chmod',
+
+    'empty' => 'This folder is empty.',
+    'folder_name' => 'Folder name',
+    'rename_to' => 'New name',
+    'mode' => 'Mode (octal)',
+    'editing' => 'Editing',
+    'driver_note' => 'Dev mode uses a local sandbox; in production this is the user\'s home via the agent.',
+
+    'saved' => 'File saved.',
+    'folder_created' => 'Folder created.',
+    'deleted' => 'Deleted.',
+    'renamed' => 'Renamed.',
+    'uploaded' => 'File uploaded.',
+    'chmod_queued' => 'Permission change queued to the agent.',
+    'chmod_done' => 'File permissions changed.',
+    'agent_unreachable' => 'Could not reach the agent; the file manager needs tkjpanel-agentd running.',
+    'confirm_delete' => 'Delete this item?',
+];

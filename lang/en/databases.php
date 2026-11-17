@@ -1,0 +1,45 @@
+<?php
+
+return [
+    'title' => 'Databases',
+    'subtitle' => 'MariaDB databases and their users. Passwords are shown once and never stored.',
+    'create' => 'New database',
+    'create_title' => 'Create database',
+
+    'name' => 'Database name',
+    'name_hint' => 'Letters, numbers and underscore. Prefixed with the owner\'s username automatically.',
+    'db_user' => 'Database user',
+    'db_user_hint' => 'Optional. Defaults to the database name.',
+    'password' => 'Password',
+    'password_hint' => 'Leave blank to auto-generate a strong password.',
+    'owner' => 'Owner',
+    'owner_no_linux' => 'The selected owner has no Linux user yet.',
+    'host' => 'Host',
+    'remote_access' => 'Allow remote access',
+    'remote_access_hint' => 'Enable connections from outside localhost (restrict by IP below).',
+    'allowed_ips' => 'Allowed IPs',
+    'allowed_ips_hint' => 'Optional IP/CIDR whitelist for remote access, separated by comma or space.',
+
+    'adminer' => 'Adminer',
+    'open_adminer' => 'Open Adminer',
+    'adminer_hint' => 'Adminer (a lightweight database GUI) is not installed yet.',
+    'adminer_setup' => 'Set up Adminer',
+    'adminer_missing_title' => 'Adminer is not installed',
+    'adminer_missing_body' => 'Adminer is a single-file database manager (like phpMyAdmin, but lighter). Run this once on the server to enable it:',
+    'adminer_missing_note' => 'It downloads the official Adminer into storage and is served only behind the panel login. You then sign in with your database credentials.',
+    'reset_password' => 'Reset password',
+    'access' => 'Remote access',
+
+    'empty' => 'No databases yet.',
+    'created' => 'Database :name created.',
+    'deleted' => 'Database deleted.',
+    'password_reset' => 'Password reset. Copy the new password now.',
+    'quota_exceeded' => 'Quota reached: maximum :max databases for this package.',
+    'name_taken' => 'A database with this name already exists.',
+    'user_taken' => 'A database user with this name already exists.',
+    'confirm_delete' => 'Delete this database and its user? All data will be lost.',
+    'confirm_reset' => 'Generate a new password for this database user?',
+
+    'credentials_title' => 'Database credentials',
+    'credentials_warning' => 'Copy these now — the password will not be shown again.',
+];

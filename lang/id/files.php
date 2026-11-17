@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'title' => 'Manajer File',
+    'subtitle' => 'Jelajah dan edit berkas, terjail ke home tiap user. Perubahan permission/owner lewat agent.',
+    'owner' => 'Pemilik',
+    'root' => 'Home',
+    'new_folder' => 'Folder baru',
+    'upload' => 'Unggah',
+    'name' => 'Nama',
+    'size' => 'Ukuran',
+    'modified' => 'Diubah',
+    'perms' => 'Izin',
+    'actions' => 'Aksi',
+    'edit' => 'Edit',
+    'rename' => 'Ubah nama',
+    'delete' => 'Hapus',
+    'download' => 'Unduh',
+    'chmod' => 'chmod',
+
+    'empty' => 'Folder ini kosong.',
+    'folder_name' => 'Nama folder',
+    'rename_to' => 'Nama baru',
+    'mode' => 'Mode (oktal)',
+    'editing' => 'Mengedit',
+    'driver_note' => 'Mode dev memakai sandbox lokal; di produksi ini home user via agent.',
+
+    'saved' => 'Berkas disimpan.',
+    'folder_created' => 'Folder dibuat.',
+    'deleted' => 'Dihapus.',
+    'renamed' => 'Nama diubah.',
+    'uploaded' => 'Berkas diunggah.',
+    'chmod_queued' => 'Perubahan izin diantre ke agent.',
+    'chmod_done' => 'Izin berkas diubah.',
+    'agent_unreachable' => 'Agent tidak dapat dihubungi; file manager butuh tkjpanel-agentd berjalan.',
+    'confirm_delete' => 'Hapus item ini?',
+];
