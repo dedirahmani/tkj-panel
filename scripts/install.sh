@@ -127,7 +127,7 @@ if ! go_ok; then
 fi
 if go_ok && [ -d agent ]; then
   log "Membangun tkjpanel-agentd..."
-  ( cd agent && CGO_ENABLED=0 GOCACHE=/tmp/tkjpanel-gocache GOPATH=/root/go "$GO" build -o /usr/local/bin/tkjpanel-agentd . )
+  ( cd agent && CGO_ENABLED=0 GOCACHE=/tmp/tkjpanel-gocache GOPATH=/root/go "$GO" build -buildvcs=false -o /usr/local/bin/tkjpanel-agentd . )
   install -m 0644 agent/deploy/tkjpanel-agentd.service /etc/systemd/system/
   mkdir -p /var/log/tkjpanel /etc/tkjpanel/ssl /var/backups/tkjpanel
   chmod 0700 /var/backups/tkjpanel
